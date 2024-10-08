@@ -1,9 +1,8 @@
-import React from 'react'
+  import React from 'react'
+  import Dashboard from '../components/styles/Dashboard';
 
-function Home() {
-  return (
-    <div>Home</div>
-  )
-}
+  function Home() {
+    return <Dashboard />;
+  }
 
-export default Home
+  export default Home
