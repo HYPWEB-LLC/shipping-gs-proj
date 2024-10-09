@@ -40,6 +40,18 @@ router.post('/login', (req, res) => {
     });
 });
 
+router.get("/AdminDetails",(req,res)=>{
+    const query = 'SELECT * FROM admin';
+    db.query(query,(err, result) => {
+        if (err) throw err;
+        if (result.length < 0) {
+            res.json({ success: true, message: 'No data available' });
+        } else {
+            res.json(result)
+        }
+    });
+})
+
 // You can add more admin routes here
 
 module.exports = router;

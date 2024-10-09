@@ -68,10 +68,10 @@ function Header() {
         </div>
 
         {/* Edit Profile Section */}
-        <div className="flex gap-4 items-center text-body-medium">
+        {/* <div className="flex gap-4 items-center text-body-medium">
           <UserPen />
           <p>Edit Profile</p>
-        </div>
+        </div> */}
       </div>
 
       {/* Overlay for mobile (closes menu on click) */}

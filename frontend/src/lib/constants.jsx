@@ -2,10 +2,10 @@ import {
   Activity,
   FileText,
   House,
-  ShoppingBag,
   ShoppingCart,
-  UsersRound,
-  Wallet
+  Tag,
+  Wallet,
+  Webhook
 } from "lucide-react";
 
 export const navLinks = [
@@ -45,8 +45,13 @@ export const navLinks = [
     label: "Addresses",
   },
   {
+    url: "/FAQs",
+    icon: <Tag />,
+    label: "FAQs  ",
+  },
+  {
     url: "/Reseller API",
-    icon: <UsersRound />,
+    icon: <Webhook />,
     label: "Reseller API",
   },
 ];
