@@ -22,97 +22,80 @@ import { CircleDollarSign, ShoppingBag } from "lucide-react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { useNavigate } from "react-router-dom";
 
-function Addresses() {
-
+function FedexOrder() {
   const data = React.useMemo(
     () => [
       {
-        No: 28,
-        name: "John Doe",
-        Country: "john@example.com",
-        date: "2024-10-08",
-        Street2: "Barati",
-        City: "Amarkantak",
-        State: "MadhyaPradesh",
-        Zip: 484886,
-        Action: "Boxer"
+        no: 28,
+        status: "John Doe",
+        note: "john@example.com",
+        createdAt: "2024-10-08",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
       },
       {
-        No: 32,
-        name: "Jane Smith",
-        Country: "jane@example.com",
-        date: "2024-10-07",
-        Street2: "Barati",
-        City: "Amarkantak",
-        State: "MadhyaPradesh",
-        Zip: 484886,
-        Action: "Boxer"
+        no: 32,
+        status: "Jane Smith",
+        note: "jane@example.com",
+        createdAt: "2024-10-07",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
       },
       {
-        No: 22,
-        name: "Sam Johnson",
-        Country: "sam@example.com",
-        date: "2024-10-06",
-        Street2: "Barati",
-        City: "Amarkantak",
-        State: "MadhyaPradesh",
-        Zip: 484886,
-        Action: "Boxer"
+        no: 22,
+        status: "Sam Johnson",
+        note: "sam@example.com",
+        createdAt: "2024-10-06",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
       },
       {
-        No: 45,
-        name: "Michael Brown",
-        Country: "michael@example.com",
-        date: "2024-10-05",
-        Street2: "Barati",
-        City: "Amarkantak",
-        State: "MadhyaPradesh",
-        Zip: 484886,
-        Action: "Boxer"
+        no: 45,
+        status: "Michael Brown",
+        note: "michael@example.com",
+        createdAt: "2024-10-05",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
       },
       {
-        No: 30,
-        name: "Emily White",
-        Country: "emily@example.com",
-        date: "2024-10-04",
-        Street2: "Barati",
-        City: "Amarkantak",
-        State: "MadhyaPradesh",
-        Zip: 484886,
-        Action: "Boxer"
+        no: 30,
+        status: "Emily White",
+        note: "emily@example.com",
+        createdAt: "2024-10-04",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
       },
       {
-        No: 35,
-        name: "Chris Green",
-        Country: "chris@example.com",
-        date: "2024-10-03",
-        Street2: "Barati",
-        City: "Amarkantak",
-        State: "MadhyaPradesh",
-        Zip: 484886,
-        Action: "Boxer"
+        no: 35,
+        status: "Chris Green",
+        note: "chris@example.com",
+        createdAt: "2024-10-03",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
       },
       {
-        No: 29,
-        name: "Jessica Blue",
-        Country: "jessica@example.com",
-        date: "2024-10-02",
-        Street2: "Barati",
-        City: "Amarkantak",
-        State: "MadhyaPradesh",
-        Zip: 484886,
-        Action: "Boxer"
+        no: 29,
+        status: "Jessica Blue",
+        note: "jessica@example.com",
+        createdAt: "2024-10-02",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
       },
       {
-        No: 40,
-        name: "David Black",
-        Country: "david@example.com",
-        date: "2024-10-01",
-        Street2: "Barati",
-        City: "Amarkantak",
-        State: "MadhyaPradesh",
-        Zip: 484886,
-        Action: "Boxer"
+        no: 40,
+        status: "David Black",
+        note: "david@example.com",
+        createdAt: "2024-10-01",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
       },
     ],
     []
@@ -121,12 +104,12 @@ function Addresses() {
   const columns = React.useMemo(
     () => [
       { Header: "No", accessor: "no" },
-      { Header: "Name", accessor: "name" },
-      { Header: "Country", accessor: "country" },
-      { Header: "Date", accessor: "date", isSortable: true },
-      { Header: "Street2", accessor: "street2" },
-      { Header: "City", accessor: "city" },
-      { Header: "State", accessor: "state" },
+      { Header: "Status", accessor: "name" },
+      { Header: "Status Note", accessor: "note" },
+      { Header: "CreatedAt", accessor: "createdAt", isSortable: true },
+      { Header: "Price", accessor: "price" },
+      { Header: "OrderId", accessor: "orderId" },
+      { Header: "Action", accessor: "action" },
       { Header: "Zip", accessor: "zip" },
       { Header: "Action", accessor: "action" },
     ],
@@ -151,11 +134,11 @@ function Addresses() {
 
   const [searchInput, setSearchInput] = useState("");
   const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const createAddress = () => {
-    navigate("/CreateAddresses")
-  }
+    navigate("/CreateFedexOrder");
+  };
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -169,12 +152,13 @@ function Addresses() {
     toggleSortBy("no", value === "asc"); // Toggle sort order
   };
 
-
   return (
     <div className="px-8 py-2">
       <div className="flex pt-10 pb-5 items-center justify-between">
         <p className="text-heading2-bold text-sm">Addresses History</p>
-        <Button colorScheme="blue" onClick={createAddress}>+ Create Address</Button>
+        <Button colorScheme="blue" onClick={createAddress}>
+          + Create Address
+        </Button>
       </div>
       <Divider className="bg-grey-200 mb-8" />
       {/* Data Table Section */}
@@ -290,4 +274,4 @@ function Addresses() {
 }
 
 
-export default Addresses;
+export default FedexOrder;

@@ -127,9 +127,15 @@ function Dashboard() {
       {/* Header section */}
       <div className="flex px-4 pt-8 pb-10 rounded-b-lg items-center justify-between bg-blue-400 h-full">
         <h2 className="text-heading2-bold">Dashboard</h2>
-        <div onClick={EditProfile} className="flex gap-2 cursor-pointer items-center text-body-medium">
-          <UserPen />
-          <p>{adminName || 'Loading...'}</p> {/* Display admin name */}
+        <div
+          onClick={EditProfile}
+          className="flex gap-3 cursor-pointer items-center text-body-medium"
+        >
+          <h1 className="text-[1.85rem]">$ 0.00</h1>
+          <div className="flex">
+            <UserPen />
+            <p>{adminName || "Loading..."}</p> {/* Display admin name */}
+          </div>
         </div>
       </div>
       <Divider className="bg-grey-200 mb-7 mt-5" />

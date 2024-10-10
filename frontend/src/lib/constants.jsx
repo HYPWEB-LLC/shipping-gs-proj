@@ -15,7 +15,7 @@ export const navLinks = [
     label: "Dashboard",
   },
   {
-    url: "/USPS Create Order",
+    url: "/createOrders",
     icon: <ShoppingCart />,
     label: "USPS Create Order",
   },
@@ -25,12 +25,12 @@ export const navLinks = [
     label: "USPS CSV",
   },
   {
-    url: "/Fedex Order",
+    url: "/fedexOrder",
     icon: <ShoppingCart />,
     label: "Fedex Order",
   },
   {
-    url: "/Amazon CSV Generator",
+    url: "/AmazonCSVGenerator",
     icon: <FileText />,
     label: "Amazon CSV Generator",
   },
