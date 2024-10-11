@@ -110,8 +110,6 @@ function FedexOrder() {
       { Header: "Price", accessor: "price" },
       { Header: "OrderId", accessor: "orderId" },
       { Header: "Action", accessor: "action" },
-      { Header: "Zip", accessor: "zip" },
-      { Header: "Action", accessor: "action" },
     ],
     []
   );
@@ -137,7 +135,7 @@ function FedexOrder() {
   const navigate = useNavigate();
 
   const createAddress = () => {
-    navigate("/CreateFedexOrder");
+    navigate("/create-fedex-Order");
   };
 
   const handleSearch = (e) => {
@@ -155,9 +153,9 @@ function FedexOrder() {
   return (
     <div className="px-8 py-2">
       <div className="flex pt-10 pb-5 items-center justify-between">
-        <p className="text-heading2-bold text-sm">Addresses History</p>
+        <p className="text-heading2-bold text-sm">Fedex Order History</p>
         <Button colorScheme="blue" onClick={createAddress}>
-          + Create Address
+          + Create Fedex Order
         </Button>
       </div>
       <Divider className="bg-grey-200 mb-8" />

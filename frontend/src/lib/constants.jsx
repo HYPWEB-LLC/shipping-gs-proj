@@ -20,7 +20,7 @@ export const navLinks = [
     label: "USPS Create Order",
   },
   {
-    url: "/USPS CSV",
+    url: "/csv-orders",
     icon: <ShoppingCart />,
     label: "USPS CSV",
   },

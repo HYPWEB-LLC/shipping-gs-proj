@@ -7,6 +7,7 @@ import Loader from "./components/layout/Loader"; // Loading component
 
 const Home = lazy(() => import("./pages/Home"));
 const CreateOrders = lazy(() => import("./pages/CreateOrders"));
+const CreateCSVOrder = lazy(() => import("./components/styles/CreateCSVOrder"));
 const FedexOrder = lazy(() => import("./pages/FedexOrder"));
 const CreateFedexOrder = lazy(() => import("./pages/CreateFedexOrder"));
 const FAQs = lazy(() => import("./pages/FAQs"));
@@ -40,6 +41,7 @@ function App() {
 
               <Route path="/" element={<Home />} />
               <Route path="/createOrders" element={<CreateOrders />} />
+              <Route path="/csv-orders" element={<CreateCSVOrder />} />
               <Route path="/fedexOrder" element={<FedexOrder />} />
               <Route
                 path="/create-fedex-Order"
@@ -47,6 +49,7 @@ function App() {
               />
               <Route path="/FAQs" element={<FAQs />} />
               <Route path="/Addresses" element={<Addresses />} />
+              <Route path="/CreateAddresses" element={<CreateAddresses />} />
               <Route
                 path="/AmazonCSVGenerator"
                 element={<AmazonCSVGenerator />}
