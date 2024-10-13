@@ -56,18 +56,6 @@ router.post("/checkout", async (req, res, next) => {
 });
 
 
-router.get("/OrdersDetails",async(req,res)=>{
-    const query = 'SELECT * FROM orders';
-    db.query(query,(err, result) => {
-        if (err) throw err;
-        if (result.length < 0) {
-            res.json({ success: true, message: 'No data available' });
-        } else {
-            res.json(result)
-        }
-    });
-})
-
 router.post("/payment/success", async (req, res, next) => {
     const { sign, order_id, uuid, payer_currency, amount, payment_amount, currency, network } = req.body; // Correctly access req.body here
 

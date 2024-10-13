@@ -65,7 +65,7 @@ function Dashboard() {
         setOrders(data);
 
         // Calculate total revenue and total orders
-        const revenue = data.reduce((acc, order) => acc + parseFloat(order.amount) || 0, 0);
+        const revenue = data.reduce((acc, order) => acc + parseFloat(order.total_order_amount) || 0, 0);
         const orderCount = data.length;
 
         setTotalRevenue(revenue);
@@ -81,26 +81,36 @@ function Dashboard() {
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchInput(value);
-    setFilter("from", value || undefined); // Assuming "from" is the searchable column
+    setFilter("name", value || undefined); // Assuming "name" is the searchable column
   };
 
   const handleSortChange = (e) => {
     const value = e.target.value;
     setSortOrder(value);
-    toggleSortBy("date", value === "asc");
+    toggleSortBy("order_date", value === "asc");
+  };
+
+  // Format date to show only date, no time
+  const formatDate = (dateString) => {
+    return dateString ? new Date(dateString).toLocaleDateString() : "N/A";
   };
 
   // Define table columns based on your provided structure
   const columns = React.useMemo(
     () => [
       { Header: "#", accessor: (row, i) => i + 1 }, // Index number for each row
-      { Header: "From", accessor: "from" },
-      { Header: "To", accessor: "to" },
+      { Header: "From", accessor: "name" }, // Name as "From"
+      { Header: "To", accessor: "company_name" }, // Assuming company_name is "To"
       { Header: "Type", accessor: "type" },
-      { Header: "Amount", accessor: "amount" },
-      { Header: "Status", accessor: "status" },
-      { Header: "Tracking", accessor: "tracking" },
-      { Header: "Date", accessor: "date", isSortable: true },
+      { Header: "Amount", accessor: "total_order_amount" },
+      { Header: "Status", accessor: () => "Pending" }, // Hardcoded "Pending"
+      { Header: "Tracking", accessor: "tracking" }, // Assuming tracking if exists
+      {
+        Header: "Date",
+        accessor: "order_date",
+        Cell: ({ value }) => formatDate(value), // Format the date
+        isSortable: true,
+      },
       { Header: "Action", accessor: "action", Cell: () => <Button>View</Button> }, // Action button
     ],
     []
@@ -261,21 +271,17 @@ function Dashboard() {
             >
               {">>"}
             </Button>
-          </HStack>
-
-          <HStack spacing={2}>
-            <Text>Rows per page:</Text>
-            <Input
-              type="number"
-              value={pageSize || ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === "" || Number(value) > 0) {
-                  setPageSize(value === "" ? 10 : Number(value)); // Default to 10 rows if empty
-                }
-              }}
-              width="60px"
-            />
+            <Select
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+              width="120px"
+            >
+              {[10, 20, 30].map((size) => (
+                <option key={size} value={size}>
+                  Show {size}
+                </option>
+              ))}
+            </Select>
           </HStack>
         </VStack>
       </div>

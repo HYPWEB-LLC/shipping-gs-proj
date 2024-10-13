@@ -6,12 +6,12 @@ const db = require('../config/db');
 router.post('/signup', (req, res) => {
     const { username, name, password } = req.body;
 
-    const queryCheck = 'SELECT * FROM admin WHERE username = ?';
+    const queryCheck = 'SELECT * FROM users WHERE username = ?';
     db.query(queryCheck, [username], (err, result) => {
         if (err) throw err;
 
         if (result.length === 0) {
-            const queryInsert = 'INSERT INTO admin (username, name, password) VALUES (?, ?, ?)';
+            const queryInsert = 'INSERT INTO users (username, name, password) VALUES (?, ?, ?)';
             db.query(queryInsert, [username, name, password], (err) => {
                 if (err) throw err;
                 // Successfully created the user
@@ -29,7 +29,7 @@ router.post('/signup', (req, res) => {
 router.post('/login', (req, res) => {
     const { username, password } = req.body;
 
-    const query = 'SELECT * FROM admin WHERE username = ? AND password = ?';
+    const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
     db.query(query, [username, password], (err, result) => {
         if (err) throw err;
         if (result.length > 0) {
@@ -41,7 +41,7 @@ router.post('/login', (req, res) => {
 });
 
 router.get("/AdminDetails",(req,res)=>{
-    const query = 'SELECT * FROM admin';
+    const query = 'SELECT * FROM users';
     db.query(query,(err, result) => {
         if (err) throw err;
         if (result.length < 0) {

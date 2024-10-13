@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
+  Card,
+  CardHeader,
+  CardBody,
+  Heading,
+  Text,
+  Divider,
+  VStack,
+  HStack,
   Input,
   Button,
   Table,
@@ -8,53 +16,107 @@ import {
   Tr,
   Th,
   Td,
-  VStack,
-  HStack,
   Select,
-  Text,
-  Divider,
 } from "@chakra-ui/react";
+import { CircleDollarSign, ShoppingBag } from "lucide-react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { useNavigate } from "react-router-dom";
 
-function Addresses() {
-  const [data, setData] = useState([]);  // State to hold API data
-  const [loading, setLoading] = useState(true);  // State to manage loading state
-  const [searchInput, setSearchInput] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
-
-  const navigate = useNavigate();
-
-  // Fetch data from API on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/OrdersDetails"); // Replace with your API endpoint
-        const jsonData = await response.json();
-        setData(jsonData);
-        setLoading(false); // Set loading to false after data is fetched
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+function FedexOrder() {
+  const data = React.useMemo(
+    () => [
+      {
+        no: 28,
+        status: "John Doe",
+        note: "john@example.com",
+        createdAt: "2024-10-08",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
+      },
+      {
+        no: 32,
+        status: "Jane Smith",
+        note: "jane@example.com",
+        createdAt: "2024-10-07",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
+      },
+      {
+        no: 22,
+        status: "Sam Johnson",
+        note: "sam@example.com",
+        createdAt: "2024-10-06",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
+      },
+      {
+        no: 45,
+        status: "Michael Brown",
+        note: "michael@example.com",
+        createdAt: "2024-10-05",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
+      },
+      {
+        no: 30,
+        status: "Emily White",
+        note: "emily@example.com",
+        createdAt: "2024-10-04",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
+      },
+      {
+        no: 35,
+        status: "Chris Green",
+        note: "chris@example.com",
+        createdAt: "2024-10-03",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
+      },
+      {
+        no: 29,
+        status: "Jessica Blue",
+        note: "jessica@example.com",
+        createdAt: "2024-10-02",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
+      },
+      {
+        no: 40,
+        status: "David Black",
+        note: "david@example.com",
+        createdAt: "2024-10-01",
+        price: "Barati",
+        orderId: 484886,
+        action: "Boxer",
+      },
+    ],
+    []
+  );
 
   const columns = React.useMemo(
     () => [
       { Header: "No", accessor: "no" },
-      { Header: "Name", accessor: "name" },
-      { Header: "Country", accessor: "country" },
-      { Header: "Date", accessor: "date", isSortable: true },
-      { Header: "Street2", accessor: "street2" },
-      { Header: "City", accessor: "city" },
-      { Header: "State", accessor: "state" },
-      { Header: "Zip", accessor: "zip" },
+      { Header: "Status", accessor: "name" },
+      { Header: "Status Note", accessor: "note" },
+      { Header: "CreatedAt", accessor: "createdAt", isSortable: true },
+      { Header: "Price", accessor: "price" },
+      { Header: "OrderId", accessor: "orderId" },
       { Header: "Action", accessor: "action" },
+      { Header: "Zip", accessor: "zip" }, // Keep this
+      // Rename the second Action column to avoid duplication
+      { Header: "Another Action", accessor: "anotherAction" }, 
     ],
     []
   );
+  
 
   const {
     getTableProps,
@@ -72,8 +134,12 @@ function Addresses() {
     toggleSortBy,
   } = useTable({ columns, data }, useSortBy, usePagination);
 
+  const [searchInput, setSearchInput] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
+  const navigate = useNavigate();
+
   const createAddress = () => {
-    navigate("/CreateAddresses");
+    navigate("/create-fedex-Order");
   };
 
   const handleSearch = (e) => {
@@ -88,17 +154,16 @@ function Addresses() {
     toggleSortBy("no", value === "asc"); // Toggle sort order
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Show loading state while fetching data
-  }
-
   return (
     <div className="px-8 py-2">
       <div className="flex pt-10 pb-5 items-center justify-between">
-        <p className="text-heading2-bold text-sm">Addresses History</p>
-        <Button colorScheme="blue" onClick={createAddress}>+ Create Address</Button>
+      <p className="text-heading2-bold text-sm">Fedex Order History</p>
+        <Button colorScheme="blue" onClick={createAddress}>
+        + Create Fedex Order
+        </Button>
       </div>
       <Divider className="bg-grey-200 mb-8" />
+      {/* Data Table Section */}
       <VStack spacing={4} align="stretch">
         <div className="flex items-center justify-between">
           <HStack spacing={2}>
@@ -110,6 +175,8 @@ function Addresses() {
             />
             <Button onClick={() => setSearchInput("")}>Clear</Button>
           </HStack>
+
+          {/* Sort Order Selection */}
           <HStack spacing={2}>
             <Text>Sort by Date:</Text>
             <Select value={sortOrder} onChange={handleSortChange} width="190px">
@@ -157,6 +224,7 @@ function Addresses() {
           </Tbody>
         </Table>
 
+        {/* Pagination Controls */}
         <HStack spacing={4}>
           <Button onClick={() => gotoPage(0)} isDisabled={!canPreviousPage}>
             {"<<"}
@@ -194,6 +262,7 @@ function Addresses() {
             value={pageSize || ""} // Default to empty string if pageSize is 0
             onChange={(e) => {
               const value = e.target.value;
+              // Only set the page size if the input is a valid number
               if (value === "" || Number(value) > 0) {
                 setPageSize(value === "" ? 10 : Number(value)); // Default to 10 rows if empty
               }
@@ -206,4 +275,5 @@ function Addresses() {
   );
 }
 
-export default Addresses;
+
+export default FedexOrder;

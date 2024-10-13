@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payment');
+const OrderRoutes = require('./routes/orders');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 // Use admin routes
 app.use('/api', adminRoutes);
 app.use('/api',paymentRoutes);
+app.use('/api',OrderRoutes);
 // Default route
 app.get('/', (req, res) => {
     console.log("Default route");
