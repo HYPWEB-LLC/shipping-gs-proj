@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require('../config/db');
 
-router.post("/order", (req, res) => {
+router.post("/create_order", (req, res) => {
     const {
         type,
         weight,
@@ -34,9 +34,9 @@ router.post("/order", (req, res) => {
 
 
 
-router.get("/OrdersDetails",async(req,res)=>{
+router.get("/OrdersDetails", async (req, res) => {
     const query = 'SELECT * FROM Create_order';
-    db.query(query,(err, result) => {
+    db.query(query, (err, result) => {
         if (err) throw err;
         if (result.length < 0) {
             res.json({ success: true, message: 'No data available' });
@@ -45,5 +45,37 @@ router.get("/OrdersDetails",async(req,res)=>{
         }
     });
 })
+
+router.post("/getPrices", async (req, res) => {
+    const { type } = req.body; // Get type from the request body
+
+    // If type is provided, fetch the price for that specific type
+    if (type) {
+        const query = 'SELECT price FROM USPS_Pricing WHERE type = ?';
+        db.query(query, [type], (err, result) => {
+            if (err) throw err;
+            if (result.length > 0) {
+                res.json({ success: true, price: result[0].price }); // Return price for the given type
+            } else {
+                res.json({ success: false, message: 'No price available for this type' });
+            }
+        });
+    } 
+    // If no type is provided, return all prices
+    else {
+        const query = 'SELECT * FROM USPS_Pricing';
+        db.query(query, (err, result) => {
+            if (err) throw err;
+            if (result.length > 0) {
+                res.json(result); // Return all pricing details as JSON
+            } else {
+                res.json({ success: true, message: 'No data available' });
+            }
+        });
+    }
+});
+
+
+
 
 module.exports = router;
