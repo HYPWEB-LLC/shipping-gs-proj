@@ -66,9 +66,37 @@ const QuickOrderForm = () => {
   const toast = useToast();
 
   const handleQuickOrderSubmit = async () => {
-    const quickOrderData = { type, weight, fromAddress, toAddress, template };
+    const quickOrderData = {
+      id: 1, // Static ID; ideally, this should be generated dynamically
+      order_type: type, // Use selected type for the order
+      weight: parseFloat(weight), // Ensure weight is a number
+      template: template || null, // Use template or null
+      total_price: price, // Use the fetched price
+      fromAddress: {
+        name: "Rahul Sharma", // Hardcoded for now; consider making it dynamic
+        company_name: "Tech Solutions", // Hardcoded for now; consider making it dynamic
+        street1: fromAddress.split(",")[0], // Split to extract street info
+        street2: null, // Optional
+        zip_code: fromAddress.split(",")[1] || "", // Adjust based on input structure
+        city: fromAddress.split(",")[2] || "", // Adjust based on input structure
+        state: fromAddress.split(",")[3] || "", // Adjust based on input structure
+        country: "India", // Hardcoded for now; consider making it dynamic
+      },
+      toAddress: {
+        name: "Priya Gupta", // Hardcoded for now; consider making it dynamic
+        company_name: "Fashion Hub", // Hardcoded for now; consider making it dynamic
+        street1: toAddress.split(",")[0], // Split to extract street info
+        street2: toAddress.split(",")[1] || "", // Adjust based on input structure
+        zip_code: toAddress.split(",")[2] || "", // Adjust based on input structure
+        city: toAddress.split(",")[3] || "", // Adjust based on input structure
+        state: toAddress.split(",")[4] || "", // Adjust based on input structure
+        country: "India", // Hardcoded for now; consider making it dynamic
+      },
+    };
+
     try {
-      const response = await axios.post("http://localhost:5000/api/getPrices", quickOrderData);
+      alert(quickOrderData.toAddress.zip_code)
+      const response = await axios.post("http://localhost:5000/api/orders", quickOrderData);
       console.log("Quick order response:", response.data);
       toast({
         title: "Quick Order Submitted",
@@ -173,10 +201,8 @@ const QuickOrderForm = () => {
 const NormalOrderForm = () => {
   const [type, setType] = useState("");
   const [weight, setWeight] = useState("");
-  const [fromAddress, setFromAddress] = useState("");
-  const [toAddress, setToAddress] = useState("");
-  const [price, setPrice] = useState(0);
   const [template, setTemplate] = useState(""); // State for templates
+  const [price, setPrice] = useState(0);
   const [loading, setLoading] = useState(false);
 
   // From Address States
@@ -199,10 +225,8 @@ const NormalOrderForm = () => {
   const [toState, setToState] = useState("");
   const [toCountry, setToCountry] = useState("");
 
-  // Toast for feedback
   const toast = useToast();
 
-  // Submit handler for Normal Order
   const fetchPrice = async (orderType) => {
     setLoading(true);
     try {
@@ -222,7 +246,34 @@ const NormalOrderForm = () => {
   }, [type]);
 
   const handleSubmit = async () => {
-    const normalOrderData = { type, weight };
+    const normalOrderData = {
+      id: 1, // Static ID; ideally, this should be generated dynamically
+      order_type: type, // Use the selected type for the order
+      weight: parseFloat(weight), // Ensure weight is a number
+      template: template || null, // Use template or null
+      total_price: price, // Use the fetched price
+      fromAddress: {
+        name: fromName, // Dynamic input
+        company_name: fromCompany, // Dynamic input
+        street1: fromStreet, // Dynamic input
+        street2: fromStreet2 || null, // Optional field
+        zip_code: fromZipCode, // Dynamic input
+        city: fromCity, // Dynamic input
+        state: fromState, // Dynamic input
+        country: fromCountry || "India", // Default to India if empty
+      },
+      toAddress: {
+        name: toName, // Dynamic input
+        company_name: toCompany, // Dynamic input
+        street1: toStreet, // Dynamic input
+        street2: toStreet2 || null, // Optional field
+        zip_code: toZipCode, // Dynamic input
+        city: toCity, // Dynamic input
+        state: toState, // Dynamic input
+        country: toCountry || "India", // Default to India if empty
+      },
+    };
+
     try {
       const response = await axios.post("http://localhost:5000/api/orders", normalOrderData);
       console.log("Normal order response:", response.data);
@@ -252,7 +303,10 @@ const NormalOrderForm = () => {
           <Text fontSize="lg">Type</Text>
           <Select
             value={type}
-            onChange={(e) => setType(e.target.value)}
+            onChange={(e) => {
+              setType(e.target.value);
+              setTemplate(""); // Clear template if type changes
+            }}
             placeholder="Select type"
           >
             <option value="USPS Ground OZ">USPS Ground OZ</option>
@@ -272,6 +326,24 @@ const NormalOrderForm = () => {
           />
         </VStack>
       </SimpleGrid>
+
+      {/* Conditional rendering of Template field for USPS Priority */}
+      {type === "USPS Priority" && (
+        <SimpleGrid columns={2} spacing={6} mb={4}>
+          <VStack>
+            <Text fontSize="lg">Template</Text>
+            <Select
+              value={template}
+              onChange={(e) => setTemplate(e.target.value)}
+              placeholder="Select template"
+            >
+              <option value="Pitney Bowes">Pitney Bowes</option>
+              <option value="Indica">Indica</option>
+              <option value="EVS">EVS</option>
+            </Select>
+          </VStack>
+        </SimpleGrid>
+      )}
 
       {/* From and To Address Sections */}
       <SimpleGrid columns={[1, null, 2]} spacing={6}>
@@ -314,7 +386,6 @@ const NormalOrderForm = () => {
           setCountry={setToCountry}
         />
       </SimpleGrid>
-
 
       <Flex justify="center" mt={6}>
         <Button colorScheme="blue" size="lg" onClick={handleSubmit} isLoading={loading}>
@@ -440,4 +511,3 @@ const AddressForm = ({
 );
 
 export default OrderForm;
-

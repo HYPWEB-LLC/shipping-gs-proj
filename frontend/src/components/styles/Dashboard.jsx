@@ -41,14 +41,14 @@ function Dashboard() {
   useEffect(() => {
     const fetchAdminName = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/AdminDetails');
+        const response = await fetch("http://localhost:5000/api/AdminDetails");
         const data = await response.json();
-        
+
         if (data && data.length > 0) {
           setAdminName(data[0].name); // Set the fetched name
         }
       } catch (error) {
-        console.error('Error fetching admin details:', error);
+        console.error("Error fetching admin details:", error);
       }
     };
 
@@ -59,19 +59,28 @@ function Dashboard() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/OrdersDetails'); // Your API endpoint
+        const response = await fetch("http://localhost:5000/api/getUSPSOrders"); // Your API endpoint
         const data = await response.json();
+        
+        // Log the fetched data to check if it's coming through correctly
+        console.log("Fetched Orders: ", data);
 
-        setOrders(data);
+        // Ensure data is an array
+        if (Array.isArray(data) && data.length > 0) {
+          setOrders(data);
 
-        // Calculate total revenue and total orders
-        const revenue = data.reduce((acc, order) => acc + parseFloat(order.total_order_amount) || 0, 0);
-        const orderCount = data.length;
+          // Calculate total revenue and total orders
+          const revenue = data.reduce(
+            (acc, order) => acc + (parseFloat(order.total_order_amount) || 0),
+            0
+          );
+          const orderCount = data.length;
 
-        setTotalRevenue(revenue);
-        setTotalOrders(orderCount);
+          setTotalRevenue(revenue);
+          setTotalOrders(orderCount);
+        }
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error("Error fetching orders:", error);
       }
     };
 
@@ -99,12 +108,12 @@ function Dashboard() {
   const columns = React.useMemo(
     () => [
       { Header: "#", accessor: (row, i) => i + 1 }, // Index number for each row
-      { Header: "From", accessor: "name" }, // Name as "From"
-      { Header: "To", accessor: "company_name" }, // Assuming company_name is "To"
-      { Header: "Type", accessor: "type" },
-      { Header: "Amount", accessor: "total_order_amount" },
-      { Header: "Status", accessor: () => "Pending" }, // Hardcoded "Pending"
-      { Header: "Tracking", accessor: "tracking" }, // Assuming tracking if exists
+      { Header: "From", accessor: "from_name" }, // Changed to "from_name"
+      { Header: "To", accessor: "to_name" }, // Changed to "to_name"
+      { Header: "Type", accessor: "order_type" }, // Changed to "order_type"
+      { Header: "Amount", accessor: "total_price" }, // Changed to "total_price"
+      { Header: "Status", accessor: "status" }, // No change needed
+      { Header: "Tracking", accessor: "tracking" }, // Assuming tracking exists or is empty
       {
         Header: "Date",
         accessor: "order_date",
@@ -125,7 +134,7 @@ function Dashboard() {
     canPreviousPage,
     canNextPage,
     pageOptions,
-    state: { pageIndex, pageSize, sortBy },
+    state: { pageIndex, pageSize },
     setPageSize,
     setFilter,
     gotoPage,
@@ -233,18 +242,26 @@ function Dashboard() {
               ))}
             </Thead>
             <Tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <Tr {...row.getRowProps()} key={row.id}>
-                    {row.cells.map((cell) => (
-                      <Td {...cell.getCellProps()} key={cell.column.id}>
-                        {cell.render("Cell")}
-                      </Td>
-                    ))}
-                  </Tr>
-                );
-              })}
+              {page.length > 0 ? (
+                page.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <Tr {...row.getRowProps()} key={row.id}>
+                      {row.cells.map((cell) => (
+                        <Td {...cell.getCellProps()} key={cell.column.id}>
+                          {cell.render("Cell")}
+                        </Td>
+                      ))}
+                    </Tr>
+                  );
+                })
+              ) : (
+                <Tr>
+                  <Td colSpan={columns.length} textAlign="center">
+                    No data available
+                  </Td>
+                </Tr>
+              )}
             </Tbody>
           </Table>
 
@@ -265,10 +282,7 @@ function Dashboard() {
                 {pageIndex + 1} of {pageOptions.length}
               </strong>
             </Text>
-            <Button
-              onClick={() => gotoPage(pageIndex + 1)}
-              isDisabled={!canNextPage}
-            >
+            <Button onClick={() => gotoPage(pageIndex + 1)} isDisabled={!canNextPage}>
               {">"}
             </Button>
             <Button
@@ -277,12 +291,14 @@ function Dashboard() {
             >
               {">>"}
             </Button>
+
+            {/* Page Size Selector */}
             <Select
               value={pageSize}
               onChange={(e) => setPageSize(Number(e.target.value))}
-              width="120px"
+              width="150px"
             >
-              {[10, 20, 30].map((size) => (
+              {[10, 20, 30, 40, 50].map((size) => (
                 <option key={size} value={size}>
                   Show {size}
                 </option>
